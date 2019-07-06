@@ -6,12 +6,12 @@ tags:
   - link
   - Post Formats
   - PowerShell
-link: 
+link: https://docs.dbatools.io/
 GitHub: https://gobiman.github.io/Blog/
 ---
 
 15 Commands inroduced by Chrissy LeMaire at PSConfEn2019.
-These commands can be found 'link: https://docs.dbatools.io/'
+These commands can be found link:(#) 
 To make sure the script does not run accidentaly, use the command 
 
 ```ruby
