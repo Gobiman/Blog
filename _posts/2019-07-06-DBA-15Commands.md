@@ -16,7 +16,7 @@ These commands can be found Some [DBA Tools Docs](https://docs.dbatools.io/) can
 To make sure the script does not run accidentaly, use the command.
 
 ```ruby
-Break
+> Break
 ```
 
 ```ruby
