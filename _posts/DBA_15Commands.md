@@ -6,11 +6,12 @@ tags:
   - link
   - Post Formats
   - PowerShell
-link: https://www.youtube.com/watch?v=Uydg1nHTzq0&t=1969s
+link: 
 GitHub: https://gobiman.github.io/Blog/
 ---
 
 15 Commands inroduced by Chrissy LeMaire at PSConfEn2019.
+These commands can be found [DBA commands] (https://docs.dbatools.io/)
 To make sure the script does not run accidentaly, use the command 
 
 ```ruby
@@ -167,15 +168,3 @@ Get-DbaTrace -SqlInstance localhost\sql2017 -Id 1 | ConvertTo-DbaXESession -Name
  # Wraps a bunch
 Test-DbaLastBackup -SqlInstance localhost -Destination localhost\sql2016 | Select * | Out-GridView
 ```
-
-
-This post is about the AutomatedLab.Common module that you can use in every day
-This theme supports **link posts**, made famous by John Gruber. To use, just add `link: https://github.com/AutomatedLab/AutomatedLab` to the post's YAML front matter and you're done.
-
-> And this is how a quote looks. they have made them!
-
-Some [link](#) can also be shown.
-
-[jekyll-docs](#)
-
-[GitHub](#)
