@@ -6,9 +6,8 @@ tags:
   - link
   - Post Formats
   - PowerShell
-link: https://github.com/AutomatedLab/AutomatedLab
-jekyll-docs: http://jekyllrb.com/docs/home
-GitHub: https://github.com/
+link: 
+GitHub: https://gobiman.github.io/Blog/
 ---
 
 15 Commands inroduced by Chrissy LeMaire at PSConfEn2019.
