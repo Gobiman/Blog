@@ -6,7 +6,7 @@ tags:
   - link
   - Post Formats
   - PowerShell
-link: 
+link: https://www.youtube.com/watch?v=Uydg1nHTzq0&t=1969s
 GitHub: https://gobiman.github.io/Blog/
 ---
 
