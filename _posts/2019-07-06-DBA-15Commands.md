@@ -23,7 +23,7 @@ Break
 # Get-DbaRegisteredServer, aliased
 Get-DbaRegisteredServer
 Get-DbaRegisteredServer -SqlInstance localhost\sql2016 -IncludeLocal
-Get-DbaRegisteredServer -Group onprem | Get-DbaDatabase | Select SqlInstance, Name | Format-Table -AutoSiz
+Get-DbaRegisteredServer -Group onprem | Get-DbaDatabase | Select SqlInstance, Name | Format-Table -AutoSize
 ```
 
 ```ruby
