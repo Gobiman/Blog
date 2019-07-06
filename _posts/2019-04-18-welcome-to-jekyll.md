@@ -1,29 +1,171 @@
 ---
-title: "Welcome to Jekyll!"
-date: 2019-04-18T15:34:30-04:00
+title: "Post: DBA Tools 15 commands can't be missed by Chrissy LeMaire"
 categories:
-  - blog
+  - Blog
 tags:
-  - Jekyll
-  - update
+  - link
+  - Post Formats
+  - PowerShell
+link: https://docs.dbatools.io/
+GitHub: https://gobiman.github.io/Blog/
 ---
 
-You'll find this post in your `_posts` directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run `jekyll serve`, which launches a web server and auto-regenerates your site when a file is updated.
+15 Commands inroduced by Chrissy LeMaire at PSConfEn2019.
+These commands can be found [link]:(#)
 
-To add new posts, simply add a file in the `_posts` directory that follows the convention `YYYY-MM-DD-name-of-post.ext` and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.
-
-Jekyll also offers powerful support for code snippets:
+To make sure the script does not run accidentaly, use the command
 
 ```ruby
-def print_hi(name)
-  puts "Hi, #{name}"
-end
-print_hi('Tom')
-#=> prints 'Hi, Tom' to STDOUT.
+Break
 ```
 
-Check out the [Jekyll docs][jekyll-docs] for more info on how to get the most out of Jekyll. File all bugs/feature requests at [Jekyll’s GitHub repo][jekyll-gh]. If you have questions, you can ask them on [Jekyll Talk][jekyll-talk].
+```ruby
+# Get-DbaRegisteredServer, aliased
+Get-DbaRegisteredServer
+Get-DbaRegisteredServer -SqlInstance localhost\sql2016 -IncludeLocal
+Get-DbaRegisteredServer -Group onprem | Get-DbaDatabase | Select SqlInstance, Name | Format-Table -AutoSiz
+```
 
-[jekyll-docs]: https://jekyllrb.com/docs/home
-[jekyll-gh]:   https://github.com/jekyll/jekyll
-[jekyll-talk]: https://talk.jekyllrb.com/
+```ruby
+# Connect-DbaInstance, supports everything!
+Get-DbaRegisteredServer -Name azuresqldb | Connect-DbaInstance
+```
+
+```ruby
+# CSV galore!
+Get-ChildItem C:\temp\psconf\csv
+Get-ChildItem C:\temp\psconf\csv | Import-DbaCsv -SqlInstance localhost\sql2017 -Database tempdb -AutoCreateTable -Encoding UTF8
+Invoke-DbaQuery -SqlInstance localhost\sql2017 -Database tempdb -Query "Select top 10 * from [jmfh-year]"
+```
+
+```ruby
+# Write-DbaDbTableData
+Get-ChildItem -File | Write-DbaDbTableData -SqlInstance localhost\sql2017 -Database tempdb -Table files -AutoCreateTable
+Get-ChildItem -File | Select *
+Invoke-DbaQuery -SqlInstance localhost\sql2017 -Database tempdb -Query "Select * from files"
+```
+
+```ruby
+# Gotta find it, run this once
+Find-DbaInstance -ComputerName localhost
+```
+
+```ruby
+# PII Management
+Invoke-DbaDbPiiScan -SqlInstance localhost\sql2017 -Database AdventureWorks2014 | Out-GridView
+```
+
+```ruby
+# Mask that
+New-DbaDbMaskingConfig -SqlInstance localhost\sql2017 -Database AdventureWorks2014 -Table EmployeeDepartmentHistory, Employee -Path C:\temp | Invoke-Item
+Invoke-DbaDbDataMasking -SqlInstance localhost\sql2017 -FilePath 'C:\github\community-presentations\chrissy-lemaire\mask.json' -ExcludeTable EmployeeDepartmentHistory
+```
+
+```ruby
+# Very Large Database Migration
+$params = @{
+    Source                          = 'localhost'
+    Destination                     = 'localhost\sql2017'
+    Database                        = 'shipped'
+    SharedPath                      = '\\localhost\backups'
+    BackupScheduleFrequencyType     = 'Daily'
+    BackupScheduleFrequencyInterval = 1
+    CompressBackup                  = $true
+    CopyScheduleFrequencyType       = 'Daily'
+    CopyScheduleFrequencyInterval   = 1
+    GenerateFullBackup              = $true
+    Force                           = $true
+}
+
+
+Invoke-DbaDbLogShipping @params
+
+# Recover when ready
+Invoke-DbaDbLogShipRecovery -SqlInstance localhost\sql2017 -Database shipped
+```
+
+```ruby
+# Install-DbaInstance / Update-DbaInstance
+Update-DbaInstance -ComputerName sql2017 -Path \\dc\share\patch -Credential base\ctrlb
+Invoke-Item 'C:\temp\psconf\Patch several SQL Servers at once using Update-DbaInstance by Kirill Kravtsov.mp4'
+```
+
+```ruby
+# Spaghetti!
+New-DbaDiagnosticAdsNotebook -TargetVersion 2017 -Path C:\temp\myNotebook.ipynb | Invoke-Item
+
+
+# Dope - dbatools.io/timeline
+Get-DbaAgentJobHistory -SqlInstance localhost\sql2017 -StartDate '2016-08-18 00:00' -EndDate '2018-08-19 23:59' -ExcludeJobSteps | ConvertTo-DbaTimeline | Out-File C:\temp\DbaAgentJobHistory.html -Encoding ASCII
+Invoke-Item -Path C:\temp\DbaAgentJobHistory.html
+
+# Prettier
+Start-Process https://dbatools.io/wp-content/uploads/2018/08/Get-DbaAgentJobHistory-html.jpg
+
+```
+
+```ruby
+
+# Availability Groups
+Invoke-Item 'C:\temp\psconf\click-a-rama.mp4'
+```
+
+
+```ruby
+# All in one, no hassle - includes credentials!
+$docker1 = Get-DbaRegisteredServer -Name dockersql1
+$docker2 = Get-DbaRegisteredServer -Name dockersql2
+
+# setup a powershell splat (has docker been reset?)
+$params = @{
+    Primary = $docker1
+    Secondary = $docker2
+    Name = "test-ag"
+    Database = "pubs"
+    ClusterType = "None"
+    SeedingMode = "Automatic"
+    FailoverMode = "Manual"
+    Confirm = $false
+ }
+ 
+# execute the command
+ New-DbaAvailabilityGroup @params
+```
+
+```ruby
+
+# Start-DbaMigration wraps 30+ commands
+Start-DbaMigration -Source localhost -Destination localhost\sql2016 -UseLastBackup -Exclude BackupDevices, SysDbUserObjects -WarningAction SilentlyContinue | Out-GridView
+```
+
+```ruby
+# Wraps like 20
+Export-DbaInstance -SqlInstance localhost\sql2017 -Path C:\temp\dr
+Get-ChildItem -Path C:\temp\dr -Recurse -Filter *database* | Invoke-Item
+```
+
+```ruby
+#region BONUS
+Get-ChildItem C:\github\community-presentations\*ps1 -Recurse | Invoke-DbatoolsRenameHelper | Out-GridView
+```
+
+```ruby
+# Diagnostic
+Invoke-DbaDiagnosticQuery -SqlInstance localhost\sql2017 | Export-DbaDiagnosticQuery -Outvariable exports
+$exports | Select -Skip 3 -First 1 | Invoke-Item
+```
+
+```ruby
+# Ola Hallengren supported
+Install-DbaMaintenanceSolution -SqlInstance localhost, localhost\sql2016, localhost\sql2017 -ReplaceExisting -InstallJobs
+```
+
+```ruby
+# ConvertTo-DbaXESession
+Get-DbaTrace -SqlInstance localhost\sql2017 -Id 1 | ConvertTo-DbaXESession -Name 'Default Trace' | Start-DbaXESession
+```
+
+```ruby
+ # Wraps a bunch
+Test-DbaLastBackup -SqlInstance localhost -Destination localhost\sql2016 | Select * | Out-GridView
+```
