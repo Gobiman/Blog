@@ -11,7 +11,7 @@ GitHub: https://gobiman.github.io/Blog/
 ---
 
 15 Commands inroduced by Chrissy LeMaire at PSConfEn2019.
-These commands can be found Some [link](#) can also be shown..
+These commands can be found Some [DBA Tools Docs](https://docs.dbatools.io/) can also be shown..
 
 To make sure the script does not run accidentaly, use the command.
 
