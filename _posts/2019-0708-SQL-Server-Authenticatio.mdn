@@ -1,0 +1,56 @@
+---
+title: "Post: SQL server authentication (Kerberos)"
+categories:
+  - Blog
+tags:
+  - link
+  - Post Formats
+  - PowerShell
+  - SQL
+link: 
+GitHub: https://gobiman.github.io/Blog/
+---
+After changing the SQL service account, we faced a problem which the SQL server was running but we were unable to connect to the instance.
+
+The error was
+> "The target principal name is incorrect. Cannot generate SSPI context. (.Net SqlClient Data Provider)"
+The connection failed due to Kerberos connection with AD.
+
+The following pages explained how to troubleshoot the issue,
+How to use Kerberos to authenticate against AD [registera service principal name for kerberos connections](https://docs.microsoft.com/en-us/sql/database-engine/configure-windows/register-a-service-principal-name-for-kerberos-connections?view=sql-server-2017)
+
+```ruby
+Tested SPN but came with errors & SPN are missing
+    import-module dbatools
+    Test-DbaSpn -ComputerName TargetServer | where {$_.isset -eq $false} | set-dbaspn -WhatIf
+    Test-DbaSpn -ComputerName TargetServer | where {$_.isset -eq $false} | set-dbaspn
+    Test-DbaSpn -ComputerName TargetServer | where {$_.isset -eq $false} | set-dbaspn -ServiceAccount DomainName\ServiceAccount -WhatIf
+    Test-DbaSpn -ComputerName TargetServer | where {$_.isset -eq $false} | set-dbaspn -ServiceAccount DomainName\ServiceAccount
+```
+
+```ruby
+Used setspn command to query the AD for this account
+    setspn /?
+```
+
+```ruby
+Querired the SPN for SQL Server 
+    setspn -Q MSSQLSvc/TargetServer.FQDN # OR remove-dbaspn
+```
+
+```ruby
+Delete the exiting SPN with & without the port (1433) as shown below
+    setspn -D MSSQLSvc/TargetServer.FQDN DomainName\ServiceAccount
+    setspn -D MSSQLSvc/TargetServer.FQDN:1433 DomainName\ServiceAccount
+```
+
+```ruby
+Ran the following command to register the service account for this SQL server
+    Test-DbaSpn -ComputerName TargetServer | where {$_.isset -eq $false} | set-dbaspn -ServiceAccount DomainName\ServiceAccount
+```
+
+```ruby
+Once connected to the instance, open query & issue the command
+    Invoke-DbaQuery -SqlInstance TargetServer -Query "SELECT auth_scheme FROM sys.dm_exec_connections WHERE session_id = @@spid ;"
+The result should be Kerberos
+```
