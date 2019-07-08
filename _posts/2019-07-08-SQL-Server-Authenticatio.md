@@ -13,8 +13,8 @@ GitHub: https://gobiman.github.io/Blog/
 After changing the SQL service account, we faced a problem which the SQL server was running but we were unable to connect to the instance.
 
 The error was
-> "The target principal name is incorrect. Cannot generate SSPI context. (.Net SqlClient Data Provider)"
-The connection failed due to Kerberos connection with AD.
+> **"The target principal name is incorrect. Cannot generate SSPI context. (.Net SqlClient Data Provider)"
+The connection failed due to Kerberos connection with AD.**
 
 The following pages explained how to troubleshoot the issue,
 How to use Kerberos to authenticate against AD [registera service principal name for kerberos connections](https://docs.microsoft.com/en-us/sql/database-engine/configure-windows/register-a-service-principal-name-for-kerberos-connections?view=sql-server-2017)
