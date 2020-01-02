@@ -53,7 +53,7 @@ Ran the following command to register the service account for this SQL server
 Test-DbaSpn -ComputerName TargetServer | where {$_.isset -eq $false} | set-dbaspn -ServiceAccount DomainName\ServiceAccount
 ```
 
-Note that the domain account should have the correct rights to change the settings
+Note: the domain account should have the correct rights to change the settings
 Once connected to the instance, open query & issue the command
 
 ```ruby
