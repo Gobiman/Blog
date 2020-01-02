@@ -22,9 +22,9 @@ How to use Kerberos to authenticate against AD [registera service principal name
 Tested SPN but came with errors & SPN are missing
 
 ```ruby
-    import-module dbatools
-    Test-DbaSpn -ComputerName TargetServer | where {$_.isset -eq $false} | set-dbaspn -ServiceAccount DomainName\ServiceAccount -WhatIf
-    Test-DbaSpn -ComputerName TargetServer | where {$_.isset -eq $false} | set-dbaspn -ServiceAccount DomainName\ServiceAccount
+import-module dbatools
+Test-DbaSpn -ComputerName TargetServer | where {$_.isset -eq $false} | set-dbaspn -ServiceAccount DomainName\ServiceAccount -WhatIf
+Test-DbaSpn -ComputerName TargetServer | where {$_.isset -eq $false} | set-dbaspn -ServiceAccount DomainName\ServiceAccount
 ```
 
 This did not work becuase of the existing service account assoicated with the target server.
