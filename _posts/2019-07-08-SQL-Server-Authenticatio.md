@@ -19,13 +19,15 @@ The connection failed due to Kerberos connection with AD.**
 The following pages explained how to troubleshoot the issue,
 How to use Kerberos to authenticate against AD [registera service principal name for kerberos connections](https://docs.microsoft.com/en-us/sql/database-engine/configure-windows/register-a-service-principal-name-for-kerberos-connections?view=sql-server-2017)
 
-```ruby
 Tested SPN but came with errors & SPN are missing
+
+```ruby
     import-module dbatools
     Test-DbaSpn -ComputerName TargetServer | where {$_.isset -eq $false} | set-dbaspn -ServiceAccount DomainName\ServiceAccount -WhatIf
     Test-DbaSpn -ComputerName TargetServer | where {$_.isset -eq $false} | set-dbaspn -ServiceAccount DomainName\ServiceAccount
-This did not work becuase of the existing service account assoicated with the target server.
 ```
+
+This did not work becuase of the existing service account assoicated with the target server.
 
 ```ruby
 Used setspn help command
