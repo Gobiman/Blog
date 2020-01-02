@@ -28,30 +28,36 @@ Test-DbaSpn -ComputerName TargetServer | where {$_.isset -eq $false} | set-dbasp
 ```
 
 This did not work becuase of the existing service account assoicated with the target server.
-
-```ruby
 Used setspn help command
-    setspn /?
-```
 
 ```ruby
+setspn /?
+```
+
 Querired the SPN for SQL Server 
-    setspn -Q MSSQLSvc/TargetServer.FQDN
-```
 
 ```ruby
+setspn -Q MSSQLSvc/TargetServer.FQDN
+```
+
 Delete the exiting SPN with & without the port (1433) as shown below
-    setspn -D MSSQLSvc/TargetServer.FQDN DomainName\ServiceAccount # OR usev remove-dbaspn
-    setspn -D MSSQLSvc/TargetServer.FQDN:1433 DomainName\ServiceAccount # OR usev remove-dbaspn
-```
 
 ```ruby
+setspn -D MSSQLSvc/TargetServer.FQDN DomainName\ServiceAccount # OR usev remove-dbaspn
+setspn -D MSSQLSvc/TargetServer.FQDN:1433 DomainName\ServiceAccount # OR usev remove-dbaspn
+```
+
 Ran the following command to register the service account for this SQL server
-    Test-DbaSpn -ComputerName TargetServer | where {$_.isset -eq $false} | set-dbaspn -ServiceAccount DomainName\ServiceAccount
-```
 
 ```ruby
-Once connected to the instance, open query & issue the command
-    Invoke-DbaQuery -SqlInstance TargetServer -Query "SELECT auth_scheme FROM sys.dm_exec_connections WHERE session_id = @@spid ;"
-The result should be Kerberos
+Test-DbaSpn -ComputerName TargetServer | where {$_.isset -eq $false} | set-dbaspn -ServiceAccount DomainName\ServiceAccount
 ```
+
+Note that the domain account should have the correct rights to change the settings
+Once connected to the instance, open query & issue the command
+
+```ruby
+Invoke-DbaQuery -SqlInstance TargetServer -Query "SELECT auth_scheme FROM sys.dm_exec_connections WHERE session_id = @@spid ;"
+```
+
+The result should be Kerberos
