@@ -6,7 +6,8 @@ tags:
   - link
   - Post Formats
   - PowerShell
-link: https://docs.dbatools.io/
+  - SQL
+# link: https://docs.dbatools.io/
 GitHub: https://gobiman.github.io/Blog/
 ---
 

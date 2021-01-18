@@ -7,7 +7,7 @@ tags:
   - Post Formats
 ---
 
-Simple could function to get RAM of a Target computer
+Simple function to get RAM of a Target computer
 
 ```ruby
 $InstalledRAM = Get-WmiObject -Class Win32_ComputerSystem  -ComputerName $serverName
